@@ -1,0 +1,85 @@
+services:
+  api-gateway:
+    build:
+      context: ./api-gateway
+    ports:
+      - "3000:3000"
+    networks:
+      - app-network
+    depends_on:
+      - product-service
+      - order-service
+      - logging-service
+
+  product-service:
+    build:
+      context: ./product-service
+    ports:
+      - "3002:3002"
+    networks:
+      - app-network
+
+  order-service:
+    build:
+      context: ./order-service
+    ports:
+      - "3001:3001"
+    networks:
+      - app-network
+
+  logging-service:
+    build:
+      context: ./logging-service
+    ports:
+      - "3003:3003"
+    networks:
+      - app-network
+
+  # prometheus:
+  #   image: prom/prometheus:latest
+  #   volumes:
+  #     - ./prometheus.yml:/etc/prometheus/prometheus.yml
+  #   ports:
+  #     - "9090:9090"
+  #   networks:
+  #     - app-network
+  #   depends_on:
+  #     - cadvisor
+  #     - node-exporter
+
+  # grafana:
+  #   image: grafana/grafana:latest
+  #   ports:
+  #     - "3004:3000"
+  #   networks:
+  #     - app-network
+  #   environment:
+  #     - GF_SECURITY_ADMIN_PASSWORD=admin
+  #   depends_on:
+  #     - prometheus
+
+  # cadvisor:
+  #   image: gcr.io/cadvisor/cadvisor:v0.47.0
+  #   container_name: cadvisor
+  #   ports:
+  #   - "8080:8080"
+  #   volumes:
+  #     - /:/rootfs:ro                         # Монтирование корня файловой системы
+  #     - /var/run:/var/run:ro                  # Монтирование /var/run для доступа к сокетам
+  #     - /sys:/sys:ro                          # Монтирование cgroup-директории
+  #     - /var/lib/docker:/var/lib/docker:ro    # Монтирование Docker-директории
+  #     - /mnt/d/Docker/DockerDekstopWSL:/data  # Монтирование папки с данными из D: в контейнер
+  #   privileged: true                           # Обязательно для доступа к cgroups
+  #   restart: always
+
+
+  # node-exporter:
+  #   image: prom/node-exporter:latest
+  #   ports:
+  #     - "9100:9100"
+  #   networks:
+  #     - app-network
+
+networks:
+  app-network:
+    driver: bridge
