@@ -1,7 +1,7 @@
 services:
   api-gateway:
     build:
-      context: ./api-gateway
+      context: ./fastify-api-gateway
     ports:
       - "3000:3000"
     networks:
@@ -13,7 +13,7 @@ services:
 
   product-service:
     build:
-      context: ./product-service
+      context: ./fastify-product-service
     ports:
       - "3002:3002"
     networks:
@@ -21,7 +21,7 @@ services:
 
   order-service:
     build:
-      context: ./order-service
+      context: ./fastify-order-service
     ports:
       - "3001:3001"
     networks:
@@ -29,7 +29,7 @@ services:
 
   logging-service:
     build:
-      context: ./logging-service
+      context: ./fastify-logging-service
     ports:
       - "3003:3003"
     networks:
