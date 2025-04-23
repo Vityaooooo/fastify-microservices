@@ -24,25 +24,25 @@ jobs:
         with:
           context: ./app/fastify-logging-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-logging-service:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-logging-service:latest
 
       - name: Build and push fastify-order-service
         uses: docker/build-push-action@v5
         with:
           context: ./app/fastify-order-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-order-service:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-order-service:latest
 
       - name: Build and push fastify-product-service
         uses: docker/build-push-action@v5
         with:
           context: ./app/fastify-product-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-product-service:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-product-service:latest
 
       - name: Build and push fastify-api-gateway
         uses: docker/build-push-action@v5
         with:
           context: ./app/fastify-api-gateway
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-api-gateway:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-api-gateway:latest
