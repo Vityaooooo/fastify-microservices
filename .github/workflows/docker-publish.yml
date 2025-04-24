@@ -79,7 +79,8 @@ jobs:
 
       - name: Log in to Railway CLI
         run: |
-          echo ${{ secrets.RAILWAY_TOKEN }} | railway login
+          export RAILWAY_TOKEN=${{ secrets.RAILWAY_TOKEN }}
+          railway link --project ${{ secrets.RAILWAY_PROJECT_ID }}
 
       - name: Link Railway project
         run: |
