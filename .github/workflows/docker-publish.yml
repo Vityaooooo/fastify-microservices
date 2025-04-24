@@ -39,7 +39,7 @@ jobs:
           export RAILWAY_TOKEN=$RAILWAY_TOKEN
           curl -fsSL https://railway.app/install.sh | sh
           cd ./fastify-logging-service
-          railway up --service ${{ secrets.LOGGING_SERVICE }} --image ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-logging-service:latest
+          railway up -- --service ${{ secrets.LOGGING_SERVICE }} --image ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-logging-service:latest
 
 
       # Fastify Order Service
