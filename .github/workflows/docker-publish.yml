@@ -36,7 +36,7 @@ jobs:
         run: |
           curl -fsSL https://railway.app/install.sh | sh
           export RAILWAY_TOKEN=$RAILWAY_TOKEN
-          railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
+          railway service update -- --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
 
       # Fastify Order Service
       - name: Build and push order-service
@@ -54,7 +54,7 @@ jobs:
           IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-order-service:latest
         run: |
           export RAILWAY_TOKEN=$RAILWAY_TOKEN
-          railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
+          railway service update -- --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
 
       # Fastify Product Service
       - name: Build and push product-service
@@ -72,7 +72,7 @@ jobs:
           IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-product-service:latest
         run: |
           export RAILWAY_TOKEN=$RAILWAY_TOKEN
-          railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
+          railway service update -- --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
 
       # Fastify API Gateway
       - name: Build and push api-gateway
@@ -90,4 +90,4 @@ jobs:
           IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-api-gateway:latest
         run: |
           export RAILWAY_TOKEN=$RAILWAY_TOKEN
-          railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
+          railway service update -- --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
