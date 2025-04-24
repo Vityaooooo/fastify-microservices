@@ -30,12 +30,12 @@ jobs:
       - name: Deploy logging-service to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          PROJECT_ID: ${{ secrets.LOGGING_PROJECT_ID }}
-          SERVICE_ID: ${{ secrets.LOGGING_SERVICE_ID }}
+          PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          SERVICE_ID: ${{ secrets.LOGGING_SERVICE }}
           IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-logging-service:latest
         run: |
           curl -fsSL https://railway.app/install.sh | sh
-          railway login --token $RAILWAY_TOKEN
+          export RAILWAY_TOKEN=$RAILWAY_TOKEN
           railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
 
       # Fastify Order Service
@@ -49,11 +49,11 @@ jobs:
       - name: Deploy order-service to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          PROJECT_ID: ${{ secrets.ORDER_PROJECT_ID }}
-          SERVICE_ID: ${{ secrets.ORDER_SERVICE_ID }}
+          PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          SERVICE_ID: ${{ secrets.ORDER_SERVICE }}
           IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-order-service:latest
         run: |
-          railway login --token $RAILWAY_TOKEN
+          export RAILWAY_TOKEN=$RAILWAY_TOKEN
           railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
 
       # Fastify Product Service
@@ -67,10 +67,11 @@ jobs:
       - name: Deploy product-service to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          PROJECT_ID: ${{ secrets.PRODUCT_PROJECT_ID }}
-          SERVICE_ID: ${{ secrets.PRODUCT_SERVICE_ID }}
+          PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          SERVICE_ID: ${{ secrets.PRODUCT_SERVICE }}
           IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-product-service:latest
         run: |
+          export RAILWAY_TOKEN=$RAILWAY_TOKEN
           railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
 
       # Fastify API Gateway
@@ -84,8 +85,9 @@ jobs:
       - name: Deploy api-gateway to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-          PROJECT_ID: ${{ secrets.GATEWAY_PROJECT_ID }}
-          SERVICE_ID: ${{ secrets.GATEWAY_SERVICE_ID }}
+          PROJECT_ID: ${{ secrets.RAILWAY_PROJECT_ID }}
+          SERVICE_ID: ${{ secrets.API_GATEWAY }}
           IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-api-gateway:latest
         run: |
+          export RAILWAY_TOKEN=$RAILWAY_TOKEN
           railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
