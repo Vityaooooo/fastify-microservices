@@ -46,3 +46,63 @@ jobs:
           context: ./fastify-api-gateway
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-api-gateway:latest
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '16'
+
+      - name: Install dependencies for fastify-logging-service
+        run: |
+          cd fastify-logging-service
+          npm install
+
+      - name: Install dependencies for fastify-order-service
+        run: |
+          cd fastify-order-service
+          npm install
+
+      - name: Install dependencies for fastify-product-service
+        run: |
+          cd fastify-product-service
+          npm install
+
+      - name: Install dependencies for fastify-api-gateway
+        run: |
+          cd fastify-api-gateway
+          npm install
+
+      - name: Install Railway CLI
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          export PATH=$PATH:$HOME/.railway/bin
+
+      - name: Log in to Railway CLI
+        run: |
+          echo ${{ secrets.RAILWAY_TOKEN }} | railway login --token
+
+      - name: Link Railway project
+        run: |
+          railway link --project ${{
+            secrets.RAILWAY_PROJECT_ID
+          }}
+
+      - name: Deploy fastify-logging-service to Railway
+        run: |
+          cd fastify-logging-service
+          railway up --service fastify-logging-service
+
+      - name: Deploy fastify-order-service to Railway
+        run: |
+          cd fastify-order-service
+          railway up --service fastify-order-service
+
+      - name: Deploy fastify-product-service to Railway
+        run: |
+          cd fastify-product-service
+          railway up --service fastify-product-service
+
+      - name: Deploy fastify-api-gateway to Railway
+        run: |
+          cd fastify-api-gateway
+          railway up --service fastify-api-gateway
