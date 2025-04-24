@@ -79,7 +79,7 @@ jobs:
 
       - name: Log in to Railway CLI
         run: |
-          echo ${{ secrets.RAILWAY_TOKEN }} | railway login --token
+          echo ${{ secrets.RAILWAY_TOKEN }} | railway login
 
       - name: Link Railway project
         run: |
