@@ -1,4 +1,4 @@
-name: Build and Deploy Microservices
+name: Build and Push Docker Images
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-deploy:
+  build-and-push:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,91 +19,30 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      # Fastify Logging Service
-      - name: Build and push logging-service
+      - name: Build and push fastify-logging-service
         uses: docker/build-push-action@v5
         with:
           context: ./fastify-logging-service
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-logging-service:latest
 
-      - name: Create Railway project link
-        run: |
-          mkdir -p ./fastify-logging-service/.railway
-          echo '{"projectId": "${{ secrets.RAILWAY_PROJECT_ID }}"}' > ./fastify-logging-service/.railway/project.json
-
-      - name: Deploy logging-service to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          export RAILWAY_TOKEN=$RAILWAY_TOKEN
-          curl -fsSL https://railway.app/install.sh | sh
-          cd ./fastify-logging-service
-          railway up -- --service ${{ secrets.LOGGING_SERVICE }} --image ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-logging-service:latest
-
-
-      # Fastify Order Service
-      - name: Build and push order-service
+      - name: Build and push fastify-order-service
         uses: docker/build-push-action@v5
         with:
           context: ./fastify-order-service
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-order-service:latest
 
-      - name: Create Railway project link
-        run: |
-          mkdir -p ./fastify-order-service/.railway
-          echo '{"projectId": "${{ secrets.RAILWAY_PROJECT_ID }}"}' > ./fastify-order-service/.railway/project.json
-
-      - name: Deploy order-service to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          export RAILWAY_TOKEN=$RAILWAY_TOKEN
-          curl -fsSL https://railway.app/install.sh | sh
-          cd ./fastify-order-service
-          railway up --service ${{ secrets.ORDER_SERVICE }} --image ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-order-service:latest
-
-      # Fastify Product Service
-      - name: Build and push product-service
+      - name: Build and push fastify-product-service
         uses: docker/build-push-action@v5
         with:
           context: ./fastify-product-service
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-product-service:latest
 
-      - name: Create Railway project link
-        run: |
-          mkdir -p ./fastify-product-service/.railway
-          echo '{"projectId": "${{ secrets.RAILWAY_PROJECT_ID }}"}' > ./fastify-product-service/.railway/project.json
-
-      - name: Deploy product-service to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          export RAILWAY_TOKEN=$RAILWAY_TOKEN
-          curl -fsSL https://railway.app/install.sh | sh
-          cd ./fastify-product-service
-          railway up --service ${{ secrets.PRODUCT_SERVICE }} --image ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-product-service:latest
-
-      # Fastify API Gateway
-      - name: Build and push api-gateway
+      - name: Build and push fastify-api-gateway
         uses: docker/build-push-action@v5
         with:
           context: ./fastify-api-gateway
           push: true
           tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-api-gateway:latest
-
-      - name: Create Railway project link
-        run: |
-          mkdir -p ./fastify-api-gateway/.railway
-          echo '{"projectId": "${{ secrets.RAILWAY_PROJECT_ID }}"}' > ./fastify-api-gateway/.railway/project.json
-
-      - name: Deploy -api-gateway to Railway
-        env:
-          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
-        run: |
-          export RAILWAY_TOKEN=$RAILWAY_TOKEN
-          curl -fsSL https://railway.app/install.sh | sh
-          cd ./fastify-api-gateway
-          railway up --service ${{ secrets.API_GATEWAY }} --image ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-api-gateway:latest
