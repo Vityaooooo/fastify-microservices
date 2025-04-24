@@ -25,14 +25,14 @@ jobs:
         with:
           context: ./fastify-logging-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-logging-service:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-logging-service:latest
 
       - name: Deploy logging-service to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           PROJECT_ID: ${{ secrets.LOGGING_PROJECT_ID }}
           SERVICE_ID: ${{ secrets.LOGGING_SERVICE_ID }}
-          IMAGE: ${{ secrets.DOCKER_USERNAME }}/fastify-logging-service:latest
+          IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-logging-service:latest
         run: |
           curl -fsSL https://railway.app/install.sh | sh
           railway login --token $RAILWAY_TOKEN
@@ -44,14 +44,14 @@ jobs:
         with:
           context: ./fastify-order-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-order-service:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-order-service:latest
 
       - name: Deploy order-service to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           PROJECT_ID: ${{ secrets.ORDER_PROJECT_ID }}
           SERVICE_ID: ${{ secrets.ORDER_SERVICE_ID }}
-          IMAGE: ${{ secrets.DOCKER_USERNAME }}/fastify-order-service:latest
+          IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-order-service:latest
         run: |
           railway login --token $RAILWAY_TOKEN
           railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
@@ -62,14 +62,14 @@ jobs:
         with:
           context: ./fastify-product-service
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-product-service:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-product-service:latest
 
       - name: Deploy product-service to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           PROJECT_ID: ${{ secrets.PRODUCT_PROJECT_ID }}
           SERVICE_ID: ${{ secrets.PRODUCT_SERVICE_ID }}
-          IMAGE: ${{ secrets.DOCKER_USERNAME }}/fastify-product-service:latest
+          IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-product-service:latest
         run: |
           railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
 
@@ -79,13 +79,13 @@ jobs:
         with:
           context: ./fastify-api-gateway
           push: true
-          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-api-gateway:latest
+          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-api-gateway:latest
 
       - name: Deploy api-gateway to Railway
         env:
           RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
           PROJECT_ID: ${{ secrets.GATEWAY_PROJECT_ID }}
           SERVICE_ID: ${{ secrets.GATEWAY_SERVICE_ID }}
-          IMAGE: ${{ secrets.DOCKER_USERNAME }}/fastify-api-gateway:latest
+          IMAGE: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-api-gateway:latest
         run: |
           railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
