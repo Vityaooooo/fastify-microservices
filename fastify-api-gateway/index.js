@@ -2,11 +2,12 @@
 const fastify = require('fastify')({ logger: true });
 const proxy = require('@fastify/http-proxy');
 const axios = require('axios');
+require('dotenv').config()
 
 // Логирование запросов
 const logRequest = async (service, level, message) => {
   try {
-    await axios.post('http://0.0.0.0:3003/logs', { // change on service name in docker-compose
+    await axios.post(process.env.LOGGING_URL || 'http://0.0.0.0:3003/logs', { // change on service name in docker-compose
       service,
       level,
       message,
@@ -52,21 +53,21 @@ fastify.addHook('onResponse', async (request, reply) => {
 
 // Прокси для Order Service
 fastify.register(proxy, {
-  upstream: 'http://0.0.0.0:3001',
+  upstream: process.env.ORDER_URL || 'http://0.0.0.0:3001',
   prefix: '/orders',
   rewritePrefix: '/orders',
 });
 
 // Прокси для Product Service
 fastify.register(require('@fastify/http-proxy'), {
-  upstream: 'http://0.0.0.0:3002', // change on service name in docker-compose
+  upstream: process.env.PRODUCT_URL || 'http://0.0.0.0:3002', // change on service name in docker-compose
   prefix: '/products',
   rewritePrefix: '/products',
 });
 
 // Прокси для Logging Service
 fastify.register(require('@fastify/http-proxy'), {
-  upstream: 'http://0.0.0.0:3003', // change on service name in docker-compose
+  upstream: process.env.LOGGING_URL || 'http://0.0.0.0:3003', // change on service name in docker-compose
   prefix: '/logs',
   rewritePrefix: '/logs',
 });
