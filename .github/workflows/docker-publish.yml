@@ -1,4 +1,4 @@
-name: Build and Push Docker Images
+name: Build and Deploy Microservices
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  build-and-push:
+  build-and-deploy:
     runs-on: ubuntu-latest
 
     steps:
@@ -19,30 +19,73 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
 
-      - name: Build and push fastify-logging-service
+      # Fastify Logging Service
+      - name: Build and push logging-service
         uses: docker/build-push-action@v5
         with:
           context: ./fastify-logging-service
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-logging-service:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-logging-service:latest
 
-      - name: Build and push fastify-order-service
+      - name: Deploy logging-service to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          PROJECT_ID: ${{ secrets.LOGGING_PROJECT_ID }}
+          SERVICE_ID: ${{ secrets.LOGGING_SERVICE_ID }}
+          IMAGE: ${{ secrets.DOCKER_USERNAME }}/fastify-logging-service:latest
+        run: |
+          curl -fsSL https://railway.app/install.sh | sh
+          railway login --token $RAILWAY_TOKEN
+          railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
+
+      # Fastify Order Service
+      - name: Build and push order-service
         uses: docker/build-push-action@v5
         with:
           context: ./fastify-order-service
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-order-service:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-order-service:latest
 
-      - name: Build and push fastify-product-service
+      - name: Deploy order-service to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          PROJECT_ID: ${{ secrets.ORDER_PROJECT_ID }}
+          SERVICE_ID: ${{ secrets.ORDER_SERVICE_ID }}
+          IMAGE: ${{ secrets.DOCKER_USERNAME }}/fastify-order-service:latest
+        run: |
+          railway login --token $RAILWAY_TOKEN
+          railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
+
+      # Fastify Product Service
+      - name: Build and push product-service
         uses: docker/build-push-action@v5
         with:
           context: ./fastify-product-service
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-product-service:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-product-service:latest
 
-      - name: Build and push fastify-api-gateway
+      - name: Deploy product-service to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          PROJECT_ID: ${{ secrets.PRODUCT_PROJECT_ID }}
+          SERVICE_ID: ${{ secrets.PRODUCT_SERVICE_ID }}
+          IMAGE: ${{ secrets.DOCKER_USERNAME }}/fastify-product-service:latest
+        run: |
+          railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
+
+      # Fastify API Gateway
+      - name: Build and push api-gateway
         uses: docker/build-push-action@v5
         with:
           context: ./fastify-api-gateway
           push: true
-          tags: ${{ secrets.DOCKER_HUB_USERNAME }}/fastify-api-gateway:latest
+          tags: ${{ secrets.DOCKER_USERNAME }}/fastify-api-gateway:latest
+
+      - name: Deploy api-gateway to Railway
+        env:
+          RAILWAY_TOKEN: ${{ secrets.RAILWAY_TOKEN }}
+          PROJECT_ID: ${{ secrets.GATEWAY_PROJECT_ID }}
+          SERVICE_ID: ${{ secrets.GATEWAY_SERVICE_ID }}
+          IMAGE: ${{ secrets.DOCKER_USERNAME }}/fastify-api-gateway:latest
+        run: |
+          railway service update --project $PROJECT_ID --service $SERVICE_ID --image $IMAGE
