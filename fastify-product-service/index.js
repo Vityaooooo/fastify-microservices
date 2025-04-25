@@ -40,7 +40,7 @@ if (!fs.existsSync(productsFile)) {
 // Эндпоинт для получения всех продуктов
 fastify.get('/products', async (request, reply) => {
   const products = JSON.parse(await fs.readFileSync(productsFile));
-  logToMonitoringService('Product Service', 'Products get successfully');
+  // logToMonitoringService('Product Service', 'Products get successfully');
   return products;
 });
 
@@ -50,7 +50,7 @@ fastify.post('/products', async (request, reply) => {
   const products = JSON.parse(await fs.readFileSync(productsFile));
   products.push({ id, name, price });
   await fs.writeFileSync(productsFile, JSON.stringify(products));
-  logToMonitoringService('Product Service', 'Product added successfully');
+  // logToMonitoringService('Product Service', 'Product added successfully');
   return { message: 'Product added', id };
 });
 
@@ -64,7 +64,7 @@ fastify.put('/products/:id', async (request, reply) => {
     if (name) product.name = name;
     if (price) product.price = price;
     await fs.writeFileSync(productsFile, JSON.stringify(products));
-    logToMonitoringService('Product Service', 'Product modifided successfully');
+    // logToMonitoringService('Product Service', 'Product modifided successfully');
     return { message: 'Product updated', id };
   } else {
     return reply.code(404).send({ message: 'Product not found' });
