@@ -78,7 +78,7 @@ fastify.setErrorHandler(async (error, request, reply) => {
 // Запуск сервера
 const start = async () => {
   try {
-    await fastify.listen({ port: 3001, host: '0.0.0.0' });
+    await fastify.listen({ port: 3001, host: '::'});//host: '0.0.0.0' }); // комментарий для локальной разработки
     console.log('Order Service is running on http://0.0.0.0:3001');
   } catch (err) {
     fastify.log.error(err);

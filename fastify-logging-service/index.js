@@ -53,7 +53,7 @@ fastify.get('/logs', async (request, reply) => {
 // Запуск сервера
 const start = async () => {
   try {
-    await fastify.listen({ port: 3003, host: '0.0.0.0' });
+    await fastify.listen({ port: 3004, host: '::'});//host: '0.0.0.0' }); // комментарий для локальной разработки
     console.log('Logging & Monitoring Service is running on http://0.0.0.0:3003');
   } catch (err) {
     fastify.log.error(err);
