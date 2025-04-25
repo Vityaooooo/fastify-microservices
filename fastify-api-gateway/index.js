@@ -7,7 +7,7 @@ require('dotenv').config()
 // Логирование запросов
 const logRequest = async (service, level, message) => {
   try {
-    await axios.post(process.env.LOGGING_URL || 'http://0.0.0.0:3003/logs', { // change on service name in docker-compose
+    await axios.post(`${process.env.LOGGING_URL}/logs` || 'http://0.0.0.0:3003/logs', { // change on service name in docker-compose
       service,
       level,
       message,
